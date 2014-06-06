@@ -1,0 +1,23 @@
+{
+  "name": "hubot_note",
+  "version": "0.0.1",
+  "description": "hubot note script",
+  "main": "./scripts/index.coffee",
+  "author": "ota42y",
+  "license": "MIT",
+  "keywords": [
+    "hubot",
+    "note"
+  ],
+  "scripts": {
+    "test": "cake test"
+  },
+  "dependencies": {
+    "coffee-script": ">= 1.1.0"
+  },
+  "devDependencies": {
+    "coffee-script": ">= 1.1.0",
+    "chai": "~1.0.3",
+    "mocha": "~1.1.0"
+  }
+}
