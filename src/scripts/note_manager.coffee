@@ -15,8 +15,9 @@ class NoteManager
     if @executeIsStartNote(room_name, note_list_name)
       return false
 
-    console.log "room_name: " + room_name + "\nnote_list_name: " + note_list_name
+    return @createNewNote(room_name, note_list_name) != null
 
+  createNewNote: (room_name, note_list_name) ->
     note_dict = @all_note[room_name]
 
     if !note_dict
@@ -29,6 +30,7 @@ class NoteManager
       note_dict[note_list_name] = note_list
 
     note_list.push(new Note(new Date()))
+
     @saveNote()
     return true
 
@@ -45,7 +47,7 @@ class NoteManager
     if note_list
       if 0 < note_list.length
         last_note = note_list[note_list.length-1]
-        return last_note.isEnd()
+        return !last_note.isEnd()
     return false
 
   executeNoteShow: (room_name, note_list_name, line_num) ->
