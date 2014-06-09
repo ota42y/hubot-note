@@ -17,6 +17,9 @@ class NoteManager
 
     console.log "room_name: " + room_name + "\nnote_list_name: " + note_list_name
 
+    return createNewNote(room_name, note_list_name)
+
+  createNewNote: (room_name, note_list_name) ->
     note_dict = @all_note[room_name]
 
     if !note_dict
@@ -29,6 +32,7 @@ class NoteManager
       note_dict[note_list_name] = note_list
 
     note_list.push(new Note(new Date()))
+
     @saveNote()
     return true
 
