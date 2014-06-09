@@ -15,7 +15,7 @@ class NoteManager
     if @executeIsStartNote(room_name, note_list_name)
       return false
 
-    return @createNewNote(room_name, note_list_name)
+    return @createNewNote(room_name, note_list_name) != null
 
   createNewNote: (room_name, note_list_name) ->
     note_dict = @all_note[room_name]
