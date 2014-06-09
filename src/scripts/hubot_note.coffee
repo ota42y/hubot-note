@@ -1,4 +1,6 @@
 
+Note = require('./note.coffee').Note
+
 
 ###
  * http://qiita.com/osakanafish/items/c64fe8a34e7221e811d0
@@ -106,34 +108,6 @@ class RoomNoteManager
         note.addLine text
         @saveNote()
         console.log "add message: " + msg.message.text
-
-
-class Note
-  constructor: (start_at) ->
-    @start_at = start_at
-    @end_at = null
-    @text = []
-    @setTitle(@start_at)
-
-  addLine: (line) ->
-    @text.push(line)
-
-  getText: (line_num) ->
-    if line_num
-      start_pos = Math.max(0, @text.length - line_num)
-      return @text.slice(start_pos).join("\n")
-    else
-      return @text.join("\n")
-
-  setEnd: (end_at) ->
-    @end_at = end_at
-
-  setTitle: (text) ->
-    @title = text
-
-  isEnd: ->
-    return @end_at != null
-
 
 
 # note start (note_name)
