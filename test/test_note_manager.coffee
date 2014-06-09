@@ -49,3 +49,19 @@ describe "note manager test", ->
       assert.notEqual null, manager.getNoteList(room_test_name, room_list_test_name)
       done()
 
+  describe "executeIsStartNote()", ->
+    manager = undefined
+
+    beforeEach (done) ->
+      manager = new NoteManager robot
+      sinon.stub(manager, "saveNote").returns(true)
+      done()
+
+    it "not started", (done) ->
+      assert.equal false, manager.executeIsStartNote(room_test_name, room_list_test_name)
+      done()
+
+    it "started", (done) ->
+      manager.executeStartNote(room_test_name, room_list_test_name)
+      assert.equal true, manager.executeIsStartNote(room_test_name, room_list_test_name)
+      done()
