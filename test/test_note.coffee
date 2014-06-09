@@ -1,7 +1,4 @@
-global.assert = require("chai").assert
-
 Note = require('../src/scripts/note.coffee').Note
-
 
 describe "note test", ->
   date = undefined
