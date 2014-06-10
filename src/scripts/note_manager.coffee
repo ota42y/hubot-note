@@ -68,14 +68,21 @@ class NoteManager
 
   # get newest started note
   getStartNoteInRoom: (room_name) ->
+    latest_note = @getLatestNoteInRoom(room_name)
+
+    if latest_note
+      if not latest_note.isEnd()
+        return latest_note
+
+    return null
+
+  getLatestNoteInRoom: (room_name) ->
     note_dict = @all_note[room_name]
 
     if note_dict
       for key, note_list of note_dict
         if 0 < note_list.length
-          last_note = note_list[note_list.length-1]
-          if not last_note.isEnd()
-            return last_note
+          return note_list[note_list.length-1]
 
     return null
 
