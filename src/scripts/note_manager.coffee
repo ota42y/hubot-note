@@ -35,9 +35,9 @@ class NoteManager
     return true
 
   executeNoteEnd: (room_name, note_list_name) ->
-    note = getStartNoteInRoom(room_name, note_list_name)
+    note = @getStartNoteInRoom(room_name, note_list_name)
     if note
-      note.setEnd(ned Date())
+      note.setEnd(new Date())
       @saveNote()
       return true
     return false
@@ -80,12 +80,11 @@ class NoteManager
     return null
 
   # write text to newest note
-  writeNote: (room_name, text) ->
+  writeTextToNewestNoteInRoom: (room_name, text) ->
     if text
       note = @getStartNoteInRoom(room_name)
       if note
         note.addLine text
         @saveNote()
-        console.log "add message: " + msg.message.text
 
 module.exports.NoteManager = NoteManager
