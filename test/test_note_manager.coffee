@@ -130,3 +130,30 @@ describe "note manager test", ->
         assert.equal all_line[all_line.length-1], manager.executeNoteShow(room_test_name, room_list_test_name)
         done()
 
+
+
+    describe "executeNoteEnd()", ->
+      manager = undefined
+
+      beforeEach (done) ->
+        manager = new NoteManager robot
+        sinon.stub(manager, "saveNote").returns(true)
+        manager.executeStartNote(room_test_name, room_list_test_name)
+        done()
+
+      it 'end', (done) ->
+        assert.equal true, manager.executeNoteEnd(room_test_name, room_list_test_name)
+        done()
+
+      it 'set end date', (done) ->
+        manager.executeNoteEnd(room_test_name, room_list_test_name)
+        latest_note = manager.getLatestNoteInRoom(room_test_name, room_list_test_name)
+        assert.equal new Date().getTime(), latest_note.end_at.getTime()
+        done()
+
+      it 'already end', (done) ->
+        manager.executeNoteEnd(room_test_name, room_list_test_name)
+        assert.equal false, manager.executeNoteEnd(room_test_name, room_list_test_name)
+        done()
+
+
