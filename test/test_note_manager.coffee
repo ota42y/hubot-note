@@ -1,5 +1,6 @@
 NoteManager = require('../src/scripts/note_manager.coffee').NoteManager
 
+
 describe "note manager test", ->
   robot = undefined
 
