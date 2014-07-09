@@ -1,3 +1,3 @@
 global.assert = require("chai").assert
 
-sinon = require('sinon')
+global.sinon = require('sinon')
