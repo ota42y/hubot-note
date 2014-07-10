@@ -1,15 +1,17 @@
+strftime = require('strftime')
+
 NoteManager = require('./note_manager.coffee').NoteManager
 
 class HubotNote
   constructor: (robot) ->
     @note_manager = new NoteManager robot
 
-  executeNoteCommand = (room_name, text) ->
+  executeMessage: (room_name, text) ->
     message_words = text.split " "
 
     command_name = message_words[1]
     command_type = message_words[2]
-    note_name = getOptionValue(message_words, "-n", formatDate(new Date(), "YYYY_MM_DD_note"))
+    note_name = getOptionValue(message_words, "-n", strftime('%Y-%m-%d', new Date))
 
     if command_name == "note"
       switch command_type
@@ -30,14 +32,14 @@ class HubotNote
     # not match command
 
     # write note
-    note_manager.writeNote room_name, text
-    return false
+    @note_manager.writeTextToNewestNoteInRoom room_name, text
+    return null
 
   getNoteName = (note_name) ->
     if note_name
       return note_name
     else
-      return formatDate(new Date(), "YYYY_MM_DD_note")
+      return strftime('%Y-%m-%d', new Date)
 
   getOptionValue = (split_str, option_str, default_str) ->
     index = split_str.indexOf(option_str)
