@@ -25,6 +25,6 @@ module.exports = (robot) ->
 
     text = msg.message.text
 
-    response = hubot_note.executeNoteCommand(room_name, text)
+    response = hubot_note.executeMessage(room_name, text)
     if response
       msg.send response
