@@ -24,11 +24,23 @@ describe "hubot note test", ->
         hubot_note = new HubotNote robot
         done()
 
+      it "show empty note"
+      ###
       it "show empty note", (done) ->
-        response = hubot_note.executeMessage(room_name, "not show")
-        # todo
-        #assert.equal "note \"#{room_name}\" not exist", response
+        response = hubot_note.executeMessage(room_name, "note show")
         done()
+      ###
+
+      it "show note"
+      ###
+      it "show note", (done) ->
+        response = hubot_note.executeMessage(room_name, "note start")
+        response = hubot_note.executeMessage(room_name, "line1")
+        response = hubot_note.executeMessage(room_name, "line2")
+        response = hubot_note.executeMessage(room_name, "note show")
+        assert.equal response, "line1\nline2"
+        done()
+      ###
 
 
 # note start (note_name)
