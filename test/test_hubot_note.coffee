@@ -14,7 +14,7 @@ describe "hubot note test", ->
     robot.brain.on = sinon.stub()
     @clock = sinon.useFakeTimers(0, "setTimeout", "clearTimeout", "setInterval", "clearInterval", "Date")
 
-    room_name = "test room"
+    room_name = "test_room"
     note_name = strftime('%Y-%m-%d', new Date)
     done()
 
@@ -22,6 +22,13 @@ describe "hubot note test", ->
     describe "show note list", ->
       beforeEach (done) ->
         hubot_note = new HubotNote robot
+        done()
+
+      it "executeNoteShow", (done) ->
+        spy = sinon.spy(hubot_note, "executeNoteShow")
+        spy.withArgs(room_name, note_name, null)
+        response = hubot_note.executeMessage(room_name, "note show")
+        assert.ok spy.withArgs(room_name, note_name, null).calledOnce
         done()
 
       it.skip "show empty note", (done) ->
