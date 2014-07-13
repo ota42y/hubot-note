@@ -37,6 +37,45 @@ describe "hubot note test", ->
         assert.equal response, "line1\nline2"
         done()
 
+    describe "note start", ->
+      beforeEach (done) ->
+        hubot_note = new HubotNote robot
+        done()
+
+      describe "note start", ->
+        it.skip "start ", (done) ->
+          response = hubot_note.executeMessage(room_name, "note start")
+          assert.equal response, "note \"#{note_name}\" start"
+          done()
+
+        it.skip "start other name", (done) ->
+          new_note_name = "test_note"
+          response = hubot_note.executeMessage(room_name, "note start #{new_note_name}")
+          assert.equal response, "note \"#{new_note_name}\" start"
+          done()
+
+    describe "note end", ->
+      beforeEach (done) ->
+        hubot_note = new HubotNote robot
+        done()
+
+      describe "note end", ->
+        it.skip "end", (done) ->
+          response = hubot_note.executeMessage(room_name, "note start")
+          response = hubot_note.executeMessage(room_name, "note end")
+          assert.equal response, "note \"#{note_name}\" end"
+          done()
+
+        it.skip "start other name", (done) ->
+          response = hubot_note.executeMessage(room_name, "note start")
+          response = hubot_note.executeMessage(room_name, "line1")
+          response = hubot_note.executeMessage(room_name, "line2")
+          response = hubot_note.executeMessage(room_name, "note end")
+          response = hubot_note.executeMessage(room_name, "line3")
+          response = hubot_note.executeMessage(room_name, "note show #{note_name}")
+          assert.equal response, "line1\nline2"
+          done()
+
 
 # note start (note_name)
 # note isStart? (note_name)
