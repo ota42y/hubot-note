@@ -34,7 +34,7 @@ class NoteManager
     @saveNote()
     return true
 
-  executeNoteEnd: (room_name, note_list_name) ->
+  executeNoteStop: (room_name, note_list_name) ->
     note = @getStartNoteInRoom(room_name, note_list_name)
     if note
       note.setEnd(new Date())

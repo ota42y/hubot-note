@@ -76,7 +76,7 @@ describe "hubot note test", ->
           assert.equal response, "note \"#{note_name}\" stopped"
           done()
 
-        it.skip "stop save text", (done) ->
+        it "stop save text", (done) ->
           response = hubot_note.executeMessage(room_name, "hubot note start")
           response = hubot_note.executeMessage(room_name, "line1")
           response = hubot_note.executeMessage(room_name, "line2")
