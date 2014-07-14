@@ -69,23 +69,22 @@ describe "hubot note test", ->
         hubot_note = new HubotNote robot
         done()
 
-      describe "note end", ->
-        it.skip "end", (done) ->
+      describe "note stop", ->
+        it "stop", (done) ->
           response = hubot_note.executeMessage(room_name, "hubot note start")
-          response = hubot_note.executeMessage(room_name, "hubot note end")
-          assert.equal response, "note \"#{note_name}\" end"
+          response = hubot_note.executeMessage(room_name, "hubot note stop")
+          assert.equal response, "note \"#{note_name}\" stopped"
           done()
 
-        it.skip "start other name", (done) ->
+        it.skip "stop save text", (done) ->
           response = hubot_note.executeMessage(room_name, "hubot note start")
           response = hubot_note.executeMessage(room_name, "line1")
           response = hubot_note.executeMessage(room_name, "line2")
-          response = hubot_note.executeMessage(room_name, "hubot note end")
+          response = hubot_note.executeMessage(room_name, "hubot note stop")
           response = hubot_note.executeMessage(room_name, "line3")
           response = hubot_note.executeMessage(room_name, "hubot note show -n #{note_name}")
           assert.equal response, "line1\nline2"
           done()
-
 
 # note start (note_name)
 # note isStart? (note_name)
