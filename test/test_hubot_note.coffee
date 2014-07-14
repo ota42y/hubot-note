@@ -12,9 +12,12 @@ describe "hubot note test", ->
     robot = sinon.stub()
     robot.brain = sinon.stub()
     robot.brain.on = sinon.stub()
+    robot.brain.data = sinon.stub()
+    robot.brain.data.all_note = sinon.stub()
+
     @clock = sinon.useFakeTimers(0, "setTimeout", "clearTimeout", "setInterval", "clearInterval", "Date")
 
-    room_name = "test room"
+    room_name = "test_room"
     note_name = strftime('%Y-%m-%d', new Date)
     done()
 
@@ -24,16 +27,23 @@ describe "hubot note test", ->
         hubot_note = new HubotNote robot
         done()
 
-      it.skip "show empty note", (done) ->
-        response = hubot_note.executeMessage(room_name, "note show")
+      it "executeNoteShow", (done) ->
+        spy = sinon.spy(hubot_note, "executeNoteShow")
+        spy.withArgs(room_name, note_name, null)
+        response = hubot_note.executeMessage(room_name, "hubot note show")
+        assert.ok spy.withArgs(room_name, note_name, null).calledOnce
+        done()
+
+      it "show empty note", (done) ->
+        response = hubot_note.executeMessage(room_name, "hubot note show")
         assert.equal response, "note \"#{note_name}\" not exist"
         done()
 
-      it.skip "show note", (done) ->
-        response = hubot_note.executeMessage(room_name, "note start")
+      it "show note", (done) ->
+        response = hubot_note.executeMessage(room_name, "hubot note start")
         response = hubot_note.executeMessage(room_name, "line1")
         response = hubot_note.executeMessage(room_name, "line2")
-        response = hubot_note.executeMessage(room_name, "note show")
+        response = hubot_note.executeMessage(room_name, "hubot note show")
         assert.equal response, "line1\nline2"
         done()
 
@@ -44,13 +54,13 @@ describe "hubot note test", ->
 
       describe "note start", ->
         it.skip "start ", (done) ->
-          response = hubot_note.executeMessage(room_name, "note start")
+          response = hubot_note.executeMessage(room_name, "hubot note start")
           assert.equal response, "note \"#{note_name}\" start"
           done()
 
         it.skip "start other name", (done) ->
           new_note_name = "test_note"
-          response = hubot_note.executeMessage(room_name, "note start #{new_note_name}")
+          response = hubot_note.executeMessage(room_name, "hubot note start #{new_note_name}")
           assert.equal response, "note \"#{new_note_name}\" start"
           done()
 
@@ -61,18 +71,18 @@ describe "hubot note test", ->
 
       describe "note end", ->
         it.skip "end", (done) ->
-          response = hubot_note.executeMessage(room_name, "note start")
-          response = hubot_note.executeMessage(room_name, "note end")
+          response = hubot_note.executeMessage(room_name, "hubot note start")
+          response = hubot_note.executeMessage(room_name, "hubot note end")
           assert.equal response, "note \"#{note_name}\" end"
           done()
 
         it.skip "start other name", (done) ->
-          response = hubot_note.executeMessage(room_name, "note start")
+          response = hubot_note.executeMessage(room_name, "hubot note start")
           response = hubot_note.executeMessage(room_name, "line1")
           response = hubot_note.executeMessage(room_name, "line2")
-          response = hubot_note.executeMessage(room_name, "note end")
+          response = hubot_note.executeMessage(room_name, "hubot note end")
           response = hubot_note.executeMessage(room_name, "line3")
-          response = hubot_note.executeMessage(room_name, "note show #{note_name}")
+          response = hubot_note.executeMessage(room_name, "hubot note show #{note_name}")
           assert.equal response, "line1\nline2"
           done()
 
