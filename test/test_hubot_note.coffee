@@ -53,14 +53,14 @@ describe "hubot note test", ->
         done()
 
       describe "note start", ->
-        it.skip "start ", (done) ->
+        it "start ", (done) ->
           response = hubot_note.executeMessage(room_name, "hubot note start")
           assert.equal response, "note \"#{note_name}\" start"
           done()
 
-        it.skip "start other name", (done) ->
+        it "start other name", (done) ->
           new_note_name = "test_note"
-          response = hubot_note.executeMessage(room_name, "hubot note start #{new_note_name}")
+          response = hubot_note.executeMessage(room_name, "hubot note start -n #{new_note_name}")
           assert.equal response, "note \"#{new_note_name}\" start"
           done()
 
@@ -82,7 +82,7 @@ describe "hubot note test", ->
           response = hubot_note.executeMessage(room_name, "line2")
           response = hubot_note.executeMessage(room_name, "hubot note end")
           response = hubot_note.executeMessage(room_name, "line3")
-          response = hubot_note.executeMessage(room_name, "hubot note show #{note_name}")
+          response = hubot_note.executeMessage(room_name, "hubot note show -n #{note_name}")
           assert.equal response, "line1\nline2"
           done()
 
