@@ -85,12 +85,3 @@ describe "hubot note test", ->
           response = hubot_note.executeMessage(room_name, "hubot note show -n #{note_name}")
           assert.equal response, "line1\nline2"
           done()
-
-# note start (note_name)
-# note isStart? (note_name)
-# note end (note_name)
-#  end current started note in room
-#   if you set note_name, end specific note
-# note show (note_name) (note_number)
-#  show specific latest note
-#   if you set note_name, show note_name's latest text
