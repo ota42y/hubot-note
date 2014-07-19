@@ -21,9 +21,9 @@ class HubotNote
         when "isStart?"
           # isStart?
           return @executeIsStart(room_name, note_name)
-        when "end"
+        when "stop"
           # end
-          return @executeNoteEnd(room_name, note_name)
+          return @executeNoteStop(room_name, note_name)
         when "show"
           # show (-l show_line_num)
           return @executeNoteShow(room_name, note_name, @getOptionValue(message_words, "-l", null))
@@ -60,8 +60,8 @@ class HubotNote
     else
       return "note \"" + note_name + "\" not start"
 
-  executeNoteEnd: (room_name, note_name) ->
-    if @note_manager.executeNoteEnd room_name, note_name
+  executeNoteStop: (room_name, note_name) ->
+    if @note_manager.executeNoteStop room_name, note_name
       return "note \"" + note_name + "\" stopped"
     else
       return "note \"" + note_name + "\" not start"
