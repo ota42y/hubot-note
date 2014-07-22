@@ -1,4 +1,4 @@
-HubotNote = require('./hubot_note.coffee').HubotNote
+HubotNote = require('./hubot_note_scripts/hubot_note.coffee').HubotNote
 
 # note start (note_name)
 # note isStart? (note_name)

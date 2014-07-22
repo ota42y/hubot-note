@@ -1,6 +1,6 @@
 strftime = require('strftime')
 
-HubotNote = require('../src/scripts/hubot_note.coffee').HubotNote
+HubotNote = require('../src/hubot_note_scripts/hubot_note.coffee').HubotNote
 
 describe "hubot note test", ->
   robot = undefined
