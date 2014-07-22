@@ -1,4 +1,4 @@
-NoteManager = require('../src/scripts/note_manager.coffee').NoteManager
+NoteManager = require('../src/hubot_note_scripts/note_manager.coffee').NoteManager
 
 
 describe "note manager test", ->
@@ -156,5 +156,3 @@ describe "note manager test", ->
         manager.executeNoteStop(room_test_name, room_list_test_name)
         assert.equal false, manager.executeNoteStop(room_test_name, room_list_test_name)
         done()
-
-

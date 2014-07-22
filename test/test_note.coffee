@@ -1,4 +1,4 @@
-Note = require('../src/scripts/note.coffee').Note
+Note = require('../src/hubot_note_scripts/note.coffee').Note
 
 describe "note test", ->
   date = undefined
@@ -49,10 +49,3 @@ describe "note test", ->
       it 'get specific lines', (done) ->
         assert.equal note.getText(3), text_list.slice(2).join("\n")
         done()
-
-
-
-
-
-
-
