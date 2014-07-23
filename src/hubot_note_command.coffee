@@ -17,7 +17,7 @@ module.exports = (robot) ->
   # default:
   #  note start YY_MM_DD_note
 
-  robot.respond /.*/, (msg) ->
+  robot.hear /.*/, (msg) ->
     if msg.message.room
       room_name = msg.message.room
     else
