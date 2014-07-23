@@ -5,28 +5,32 @@ NoteManager = require('./note_manager.coffee').NoteManager
 class HubotNote
   constructor: (robot) ->
     @note_manager = new NoteManager robot
+    @name_match = new RegExp("^" + robot.name)
 
   executeMessage: (room_name, text) ->
     message_words = text.split " "
 
-    command_name = message_words[1]
-    command_type = message_words[2]
-    note_name = @getOptionValue(message_words, "-n", strftime('%Y-%m-%d', new Date))
+    user_name = message_words[0]
 
-    if command_name == "note"
-      switch command_type
-        when "start"
-          # hoge
-          return @executeNoteStart(room_name, note_name)
-        when "isStart?"
-          # isStart?
-          return @executeIsStart(room_name, note_name)
-        when "stop"
-          # end
-          return @executeNoteStop(room_name, note_name)
-        when "show"
-          # show (-l show_line_num)
-          return @executeNoteShow(room_name, note_name, @getOptionValue(message_words, "-l", null))
+    if user_name.match @name_match
+      command_name = message_words[1]
+      command_type = message_words[2]
+      note_name = @getOptionValue(message_words, "-n", strftime('%Y-%m-%d', new Date))
+
+      if command_name == "note"
+        switch command_type
+          when "start"
+            # hoge
+            return @executeNoteStart(room_name, note_name)
+          when "isStart?"
+            # isStart?
+            return @executeIsStart(room_name, note_name)
+          when "stop"
+            # end
+            return @executeNoteStop(room_name, note_name)
+          when "show"
+            # show (-l show_line_num)
+            return @executeNoteShow(room_name, note_name, @getOptionValue(message_words, "-l", null))
 
 
     # not match command

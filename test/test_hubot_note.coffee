@@ -9,11 +9,12 @@ describe "hubot note test", ->
   room_name = undefined
   note_name = undefined
   beforeEach (done) ->
-    robot = sinon.stub()
+    robot = new Object()
     robot.brain = sinon.stub()
     robot.brain.on = sinon.stub()
     robot.brain.data = sinon.stub()
     robot.brain.data.all_note = sinon.stub()
+    robot.name = "hubot"
 
     @clock = sinon.useFakeTimers(0, "setTimeout", "clearTimeout", "setInterval", "clearInterval", "Date")
 
