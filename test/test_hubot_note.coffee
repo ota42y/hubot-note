@@ -48,6 +48,19 @@ describe "hubot note test", ->
         assert.equal response, "line1\nline2"
         done()
 
+      it "append text to note", (done) ->
+        response = hubot_note.executeMessage(room_name, "hubot note start")
+        response = hubot_note.executeMessage(room_name, "line1")
+        response = hubot_note.executeMessage(room_name, "line2")
+        response = hubot_note.executeMessage(room_name, "hubot note stop")
+        response = hubot_note.executeMessage(room_name, "not_show_line")
+        response = hubot_note.executeMessage(room_name, "hubot note start")
+        response = hubot_note.executeMessage(room_name, "line3")
+        response = hubot_note.executeMessage(room_name, "hubot note show")
+        assert.equal response, "line1\nline2\nline3"
+        done()
+
+
     describe "note start", ->
       beforeEach (done) ->
         hubot_note = new HubotNote robot

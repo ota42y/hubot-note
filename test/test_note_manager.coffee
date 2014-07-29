@@ -14,7 +14,7 @@ describe "note manager test", ->
     robot.brain.on = sinon.stub()
 
     room_test_name = "test"
-    note_test_name = "test_list"
+    note_test_name = "test_note"
 
     done()
 
@@ -41,7 +41,7 @@ describe "note manager test", ->
         done()
 
       it "no exist", (done) ->
-        assert.equal manager.getNote('room', 'list'), null
+        assert.equal manager.getNote('room', 'note'), null
         done()
 
       it "exist", (done) ->
@@ -69,7 +69,6 @@ describe "note manager test", ->
         manager.executeStartNote(room_test_name, note_test_name)
         assert.equal true, manager.executeIsStartNote(room_test_name, note_test_name)
         done()
-
 
     describe "executeStartNote()", ->
       manager = undefined
