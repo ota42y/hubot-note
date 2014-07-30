@@ -11,25 +11,23 @@ class NoteManager
   saveNote: ->
     @robot.brain.data.all_note = @all_note
 
-  executeStartNote: (room_name, note_list_name) ->
-    if @executeIsStartNote(room_name, note_list_name)
+  executeStartNote: (room_name, note_name) ->
+    if @executeIsStartNote(room_name, note_name)
       return false
 
-    return @createNewNote(room_name, note_list_name) != null
+    return @createNewNote(room_name, note_name) != null
 
-  createNewNote: (room_name, note_list_name) ->
+  createNewNote: (room_name, note_name) ->
     note_dict = @all_note[room_name]
 
     if !note_dict
       note_dict= {}
       @all_note[room_name] = note_dict
 
-    note_list = note_dict[note_list_name]
-    if !note_list
-      note_list = []
-      note_dict[note_list_name] = note_list
-
-    note_list.push(new Note(new Date()))
+    note = note_dict[note_name]
+    if !note
+      note = new Note(new Date())
+      note_dict[note_name] = note
 
     @saveNote()
     return true
@@ -42,37 +40,33 @@ class NoteManager
       return true
     return false
 
-  executeIsStartNote: (room_name, note_list_name) ->
-    note_list = @getNoteList(room_name, note_list_name)
-    if note_list
-      if 0 < note_list.length
-        last_note = note_list[note_list.length-1]
-        return !last_note.isEnd()
+  executeIsStartNote: (room_name, note_name) ->
+    note = @getNote(room_name, note_name)
+    if note
+      return !note.isEnd()
     return false
 
-  executeNoteShow: (room_name, note_list_name, line_num) ->
-    note_list = @getNoteList(room_name, note_list_name)
-    if note_list
-      if 0 < note_list.length
-        last_note = note_list[note_list.length-1]
-        return last_note.getText(line_num)
+  executeNoteShow: (room_name, note_name, line_num) ->
+    note = @getNote(room_name, note_name)
+    if note
+      return note.getText(line_num)
     return null
 
-  getNoteList: (room_name, note_list_name) ->
+  getNote: (room_name, note_name) ->
     note_dict = @all_note[room_name]
 
     if note_dict
-      note_list = note_dict[note_list_name]
-      return note_list
+      note = note_dict[note_name]
+      return note
     return null
 
   # get newest started note
   getStartNoteInRoom: (room_name) ->
-    latest_note = @getLatestNoteInRoom(room_name)
+    note = @getLatestNoteInRoom(room_name)
 
-    if latest_note
-      if not latest_note.isEnd()
-        return latest_note
+    if note
+      if not note.isEnd()
+        return note
 
     return null
 
