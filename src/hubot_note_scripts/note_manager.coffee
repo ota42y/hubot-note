@@ -3,6 +3,7 @@ Note = require('./note.coffee').Note
 class NoteManager
   constructor: (@robot) ->
     @all_note = {}
+    @started_note_list = []
 
     @robot.brain.on 'loaded', ->
       if @robot.brain.data.all_note
@@ -11,52 +12,67 @@ class NoteManager
   saveNote: ->
     @robot.brain.data.all_note = @all_note
 
-  executeStartNote: (room_name, note_name) ->
-    if @executeIsStartNote(room_name, note_name)
+  executeStartNote: (room_name, note_title) ->
+    if @executeGetStartedNote(room_name, note_title)
       return false
 
-    return @createNewNote(room_name, note_name) != null
+    note = @createNewNote(room_name, note_title)
+    if note == null
+      return false
 
-  createNewNote: (room_name, note_name) ->
+    @started_note_list.push(note)
+    return true
+
+  createNewNote: (room_name, note_title) ->
     note_dict = @all_note[room_name]
 
     if !note_dict
       note_dict= {}
       @all_note[room_name] = note_dict
 
-    note = note_dict[note_name]
+    note = note_dict[note_title]
     if !note
-      note = new Note(new Date())
-      note_dict[note_name] = note
+      note = new Note(note_title, new Date())
+      note_dict[note_title] = note
 
     @saveNote()
-    return true
+    return note
 
   executeNoteStop: (room_name, note_list_name) ->
-    note = @getStartNoteInRoom(room_name, note_list_name)
+    note = @executeGetStartedNote(room_name, note_list_name)
+
     if note
       note.setEnd(new Date())
       @saveNote()
+      i = @started_note_list.length - 1
+      while i >= 0
+        @started_note_list.splice i, 1  if @started_note_list[i].title == note_list_name
+        i--
+
       return true
     return false
 
-  executeIsStartNote: (room_name, note_name) ->
-    note = @getNote(room_name, note_name)
-    if note
-      return !note.isEnd()
-    return false
+  executeGetStartedNote: (room_name, note_title = null) ->
+    if note_title == null
+      if @started_note_list.length != 0
+        return @started_note_list[@started_note_list.length - 1]
 
-  executeNoteShow: (room_name, note_name, line_num) ->
-    note = @getNote(room_name, note_name)
+    for note in @started_note_list
+      if note.title == note_title
+        return note
+    return null
+
+  executeNoteShow: (room_name, note_title, line_num) ->
+    note = @getNote(room_name, note_title)
     if note
       return note.getText(line_num)
     return null
 
-  getNote: (room_name, note_name) ->
+  getNote: (room_name, note_title) ->
     note_dict = @all_note[room_name]
 
     if note_dict
-      note = note_dict[note_name]
+      note = note_dict[note_title]
       return note
     return null
 

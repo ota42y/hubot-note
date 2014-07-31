@@ -7,7 +7,7 @@ describe "hubot note test", ->
   hubot_note = undefined
 
   room_name = undefined
-  note_name = undefined
+  note_title = undefined
   beforeEach (done) ->
     robot = new Object()
     robot.brain = sinon.stub()
@@ -19,7 +19,7 @@ describe "hubot note test", ->
     @clock = sinon.useFakeTimers(0, "setTimeout", "clearTimeout", "setInterval", "clearInterval", "Date")
 
     room_name = "test_room"
-    note_name = strftime('%Y-%m-%d', new Date)
+    note_title = strftime('%Y-%m-%d', new Date)
     done()
 
   describe "functions", ->
@@ -30,14 +30,14 @@ describe "hubot note test", ->
 
       it "executeNoteShow", (done) ->
         spy = sinon.spy(hubot_note, "executeNoteShow")
-        spy.withArgs(room_name, note_name, null)
+        spy.withArgs(room_name, note_title, null)
         response = hubot_note.executeMessage(room_name, "hubot note show")
-        assert.ok spy.withArgs(room_name, note_name, null).calledOnce
+        assert.ok spy.withArgs(room_name, note_title, null).calledOnce
         done()
 
       it "show empty note", (done) ->
         response = hubot_note.executeMessage(room_name, "hubot note show")
-        assert.equal response, "note \"#{note_name}\" not exist"
+        assert.equal response, "note \"#{note_title}\" not exist"
         done()
 
       it "show note", (done) ->
@@ -69,13 +69,13 @@ describe "hubot note test", ->
       describe "note start", ->
         it "start ", (done) ->
           response = hubot_note.executeMessage(room_name, "hubot note start")
-          assert.equal response, "note \"#{note_name}\" start"
+          assert.equal response, "note \"#{note_title}\" start"
           done()
 
         it "start other name", (done) ->
-          new_note_name = "test_note"
-          response = hubot_note.executeMessage(room_name, "hubot note start -n #{new_note_name}")
-          assert.equal response, "note \"#{new_note_name}\" start"
+          new_note_title = "test_note"
+          response = hubot_note.executeMessage(room_name, "hubot note start -n #{new_note_title}")
+          assert.equal response, "note \"#{new_note_title}\" start"
           done()
 
     describe "note end", ->
@@ -87,7 +87,7 @@ describe "hubot note test", ->
         it "stop", (done) ->
           response = hubot_note.executeMessage(room_name, "hubot note start")
           response = hubot_note.executeMessage(room_name, "hubot note stop")
-          assert.equal response, "note \"#{note_name}\" stopped"
+          assert.equal response, "note \"#{note_title}\" stopped"
           done()
 
         it "stop save text", (done) ->
@@ -96,6 +96,7 @@ describe "hubot note test", ->
           response = hubot_note.executeMessage(room_name, "line2")
           response = hubot_note.executeMessage(room_name, "hubot note stop")
           response = hubot_note.executeMessage(room_name, "line3")
-          response = hubot_note.executeMessage(room_name, "hubot note show -n #{note_name}")
+          response = hubot_note.executeMessage(room_name, "hubot note show -n #{note_title}")
           assert.equal response, "line1\nline2"
           done()
+

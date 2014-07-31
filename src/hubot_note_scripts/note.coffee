@@ -1,11 +1,11 @@
 
 
 class Note
-  constructor: (start_at) ->
+  constructor: (title, start_at) ->
     @start_at = start_at
     @end_at = null
     @text = []
-    @setTitle(@start_at)
+    @setTitle(title)
 
   addLine: (line) ->
     @text.push(line)
