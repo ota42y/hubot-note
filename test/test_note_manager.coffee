@@ -135,7 +135,11 @@ describe "note manager test", ->
         assert.equal all_line[all_line.length-1], manager.executeNoteShow(room_test_name)
         done()
 
-
+      it "default note name", (done) ->
+        manager.executeStartNote(room_test_name, note_test_title)
+        for line in all_line
+          manager.writeTextToNewestNoteInRoom(room_test_name, line)
+        assert.equal all_line.join("\n"), manager.executeNoteShow(room_test_name)
 
     describe "executeNoteEnd()", ->
       manager = undefined

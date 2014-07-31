@@ -8,8 +8,10 @@ describe "note test", ->
 
   describe "note method", ->
     note = undefined
+    note_name = undefined
     beforeEach (done) ->
-      note = new Note date
+      note_name = "test_name"
+      note = new Note note_name, date
       done()
 
     it 'set date', (done)->
@@ -17,7 +19,7 @@ describe "note test", ->
       done()
 
     it 'set title', (done) ->
-      assert.equal note.title, date
+      assert.equal note.title, note_name
       done()
 
     it 'add text', (done) ->

@@ -5,7 +5,7 @@ class Note
     @start_at = start_at
     @end_at = null
     @text = []
-    @setTitle(title)
+    @title = title
 
   addLine: (line) ->
     @text.push(line)
@@ -19,9 +19,6 @@ class Note
 
   setEnd: (end_at) ->
     @end_at = end_at
-
-  setTitle: (text) ->
-    @title = text
 
   isEnd: ->
     return @end_at != null
