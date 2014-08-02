@@ -13,10 +13,14 @@ class NoteManager
     @robot.brain.data.all_note = @all_note
 
   executeStartNote: (room_name, note_title) ->
+    # already started
     if @executeGetStartedNote(room_name, note_title)
       return false
 
-    note = @createNewNote(room_name, note_title)
+    note = @getNote(room_name, note_title)
+    if note == null
+      note = @createNewNote(room_name, note_title)
+
     if note == null
       return false
 
@@ -46,18 +50,21 @@ class NoteManager
       @saveNote()
       i = @started_note_list.length - 1
       while i >= 0
-        @started_note_list.splice i, 1  if @started_note_list[i].title == note_list_name
+        if @started_note_list[i].title == note_list_name
+          @started_note_list.splice i, 1
         i--
 
       return true
     return false
 
   executeGetStartedNote: (room_name, note_title = null) ->
-    if note_title == null
-      if @started_note_list.length != 0
-        return @started_note_list[@started_note_list.length - 1]
+    return null if @started_note_list.length == 0
 
-    for note in @started_note_list
+    if note_title == null
+      return @started_note_list[@started_note_list.length - 1]
+
+    for index in [0..@started_note_list.length-1]
+      note = @started_note_list[index]
       if note.title == note_title
         return note
     return null
@@ -73,33 +80,14 @@ class NoteManager
 
     if note_dict
       note = note_dict[note_title]
-      return note
-    return null
-
-  # get newest started note
-  getStartNoteInRoom: (room_name) ->
-    note = @getLatestNoteInRoom(room_name)
-
-    if note
-      if not note.isEnd()
+      if note
         return note
-
-    return null
-
-  getLatestNoteInRoom: (room_name) ->
-    note_dict = @all_note[room_name]
-
-    if note_dict
-      for key, note_list of note_dict
-        if 0 < note_list.length
-          return note_list[note_list.length-1]
-
     return null
 
   # write text to newest note
   writeTextToNewestNoteInRoom: (room_name, text) ->
     if text
-      note = @getStartNoteInRoom(room_name)
+      note = @executeGetStartedNote(room_name)
       if note
         note.addLine text
         @saveNote()

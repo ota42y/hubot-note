@@ -25,12 +25,12 @@ class HubotNote
               note_title = strftime('%Y-%m-%d', new Date)
             return @executeNoteStart(room_name, note_title)
           when "isStart?"
-            return @executeIsStart(room_name, note_title)
+            return @executeIsStart(room_name, @getNoteName(room_name, note_title))
           when "stop"
-            return @executeNoteStop(room_name, note_title)
+            return @executeNoteStop(room_name, @getNoteName(room_name, note_title))
           when "show"
             # show (-l show_line_num)
-            return @executeNoteShow(room_name, note_title, @getOptionValue(message_words, "-l", null))
+            return @executeNoteShow(room_name, @getNoteName(room_name, note_title), @getOptionValue(message_words, "-l", null))
 
 
     # not match command
@@ -39,11 +39,14 @@ class HubotNote
     @note_manager.writeTextToNewestNoteInRoom room_name, text
     return null
 
-  getNoteName: (note_title) ->
+  getNoteName: (room_name, note_title) ->
     if note_title
       return note_title
     else
-      return strftime('%Y-%m-%d', new Date)
+      note = @note_manager.executeGetStartedNote(room_name)
+      if note != null
+        return note.title
+    return null
 
   getOptionValue: (split_str, option_str, default_data) ->
     index = split_str.indexOf(option_str)
@@ -54,27 +57,30 @@ class HubotNote
 
   executeNoteStart: (room_name, note_title) ->
     if @note_manager.executeStartNote room_name, note_title
-      return "note \"" + note_title + "\" start"
+      return "#{note_title} start"
     else
-      return "note \"" + note_title + "\" alredy started"
+      return "#{note_title} can't start"
 
   executeIsStart: (room_name, note_title) ->
+    return "There is no started note" if note_title == null
     if @note_manager.executeIsStartNote room_name, note_title
-      return "note \"" + note_title + "\" already started"
+      return "#{note_title} is started"
     else
-      return "note \"" + note_title + "\" not start"
+      return "#{note_title} isn't started"
 
   executeNoteStop: (room_name, note_title) ->
+    return "There is no started note" if note_title == null
     if @note_manager.executeNoteStop room_name, note_title
-      return "note \"" + note_title + "\" stopped"
+      return "#{note_title} is stopped"
     else
-      return "note \"" + note_title + "\" not start"
+      return "#{note_title} isn't start"
 
   executeNoteShow: (room_name, note_title, line_num) ->
+    return "There is no started note" if note_title == null
     note_text = @note_manager.executeNoteShow room_name, note_title, line_num
     if note_text
       return note_text
     else
-      return "note \"" + note_title + "\" not exist"
+      return "#{note_title} not exist"
 
 module.exports.HubotNote = HubotNote

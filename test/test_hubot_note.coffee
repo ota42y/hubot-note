@@ -37,7 +37,7 @@ describe "hubot note test", ->
 
       it "show empty note", (done) ->
         response = hubot_note.executeMessage(room_name, "hubot note show")
-        assert.equal response, "note \"#{note_title}\" not exist"
+        assert.equal response, "There is no started note"
         done()
 
       it "show note", (done) ->
@@ -69,13 +69,13 @@ describe "hubot note test", ->
       describe "note start", ->
         it "start ", (done) ->
           response = hubot_note.executeMessage(room_name, "hubot note start")
-          assert.equal response, "note \"#{note_title}\" start"
+          assert.equal response, "#{note_title} start"
           done()
 
         it "start other name", (done) ->
           new_note_title = "test_note"
           response = hubot_note.executeMessage(room_name, "hubot note start -n #{new_note_title}")
-          assert.equal response, "note \"#{new_note_title}\" start"
+          assert.equal response, "#{new_note_title} start"
           done()
 
     describe "note end", ->
@@ -87,7 +87,7 @@ describe "hubot note test", ->
         it "stop", (done) ->
           response = hubot_note.executeMessage(room_name, "hubot note start")
           response = hubot_note.executeMessage(room_name, "hubot note stop")
-          assert.equal response, "note \"#{note_title}\" stopped"
+          assert.equal response, "#{note_title} is stopped"
           done()
 
         it "stop save text", (done) ->

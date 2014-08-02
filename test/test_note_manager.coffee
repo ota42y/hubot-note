@@ -30,6 +30,8 @@ describe "note manager test", ->
       it "success", (done) ->
         assert.equal note_test_title, manager.createNewNote(room_test_name, note_test_title).title
         assert.notEqual null, manager.getNote(room_test_name, note_test_title)
+        assert.equal 0, manager.started_note_list.length
+        assert.equal null, manager.executeGetStartedNote(room_test_name)
         done()
 
     describe "getNote", ->
@@ -40,16 +42,31 @@ describe "note manager test", ->
         sinon.stub(manager, "saveNote").returns(true)
         done()
 
+      it "success", (done) ->
+        manager.createNewNote(room_test_name, note_test_title)
+        assert.equal manager.getNote(room_test_name, note_test_title).title, note_test_title
+        done()
+
+      it "not exist", (done) ->
+        assert.equal manager.getNote(room_test_name, note_test_title), null
+        done()
+
+    describe "executeGetStartedNote", ->
+      manager = undefined
+
+      beforeEach (done) ->
+        manager = new NoteManager robot
+        sinon.stub(manager, "saveNote").returns(true)
+        done()
+
       it "no exist", (done) ->
-        assert.equal manager.getNote('room', 'note'), null
+        assert.equal manager.executeGetStartedNote('room', 'note'), null
         done()
 
       it "exist", (done) ->
-        assert.equal null, manager.getNote(room_test_name, note_test_title)
+        assert.equal null, manager.executeGetStartedNote(room_test_name, note_test_title)
         assert.equal note_test_title, manager.createNewNote(room_test_name, note_test_title).title
-        assert.equal note_test_title, manager.getNote(room_test_name, note_test_title).title
         done()
-
 
   describe "commands", ->
 
@@ -132,14 +149,8 @@ describe "note manager test", ->
           manager.writeTextToNewestNoteInRoom(room_test_name, line)
           manager.executeNoteStop(room_test_name, note_test_title + line)
 
-        assert.equal all_line[all_line.length-1], manager.executeNoteShow(room_test_name)
+        assert.equal manager.executeNoteShow(room_test_name), null
         done()
-
-      it "default note name", (done) ->
-        manager.executeStartNote(room_test_name, note_test_title)
-        for line in all_line
-          manager.writeTextToNewestNoteInRoom(room_test_name, line)
-        assert.equal all_line.join("\n"), manager.executeNoteShow(room_test_name)
 
     describe "executeNoteEnd()", ->
       manager = undefined
