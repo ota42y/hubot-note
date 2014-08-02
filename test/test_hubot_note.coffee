@@ -30,9 +30,9 @@ describe "hubot note test", ->
 
       it "executeNoteShow", (done) ->
         spy = sinon.spy(hubot_note, "executeNoteShow")
-        spy.withArgs(room_name, note_title, null)
+        spy.withArgs(room_name, null, null)
         response = hubot_note.executeMessage(room_name, "hubot note show")
-        assert.ok spy.withArgs(room_name, note_title, null).calledOnce
+        assert.ok spy.withArgs(room_name, null, null).calledOnce
         done()
 
       it "show empty note", (done) ->

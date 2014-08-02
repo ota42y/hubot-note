@@ -15,18 +15,18 @@ class HubotNote
     if user_name.match @name_match
       command_name = message_words[1]
       command_type = message_words[2]
-      note_title = @getOptionValue(message_words, "-n", strftime('%Y-%m-%d', new Date))
+
+      note_title = @getOptionValue(message_words, "-n", null)
 
       if command_name == "note"
         switch command_type
           when "start"
-            # hoge
+            if note_title == null
+              note_title = strftime('%Y-%m-%d', new Date)
             return @executeNoteStart(room_name, note_title)
           when "isStart?"
-            # isStart?
             return @executeIsStart(room_name, note_title)
           when "stop"
-            # end
             return @executeNoteStop(room_name, note_title)
           when "show"
             # show (-l show_line_num)
@@ -45,12 +45,12 @@ class HubotNote
     else
       return strftime('%Y-%m-%d', new Date)
 
-  getOptionValue: (split_str, option_str, default_str) ->
+  getOptionValue: (split_str, option_str, default_data) ->
     index = split_str.indexOf(option_str)
     if 0 < index and index+1 < split_str.length
       return split_str[index+1]
     else
-      return default_str
+      return default_data
 
   executeNoteStart: (room_name, note_title) ->
     if @note_manager.executeStartNote room_name, note_title
