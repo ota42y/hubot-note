@@ -1,6 +1,6 @@
 {
   "name": "hubot-note",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "hubot note taking script",
   "main": "./src/hubot_note_command.coffee",
   "author": {

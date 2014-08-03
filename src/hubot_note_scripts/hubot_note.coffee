@@ -5,7 +5,7 @@ NoteManager = require('./note_manager.coffee').NoteManager
 class HubotNote
   constructor: (robot) ->
     @note_manager = new NoteManager robot
-    @name_match = new RegExp("^" + robot.name)
+    @name_match = new RegExp(robot.name)
 
   executeMessage: (room_name, text) ->
     message_words = text.split " "
