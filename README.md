@@ -1,10 +1,10 @@
 # hubot-note
-[![Build Status](ttps://secure.travis-ci.org/ota42y/hubot-note.png?branch=master)](http://travis-ci.org/ota42y/hubot-note)
+[![Build Status](https://secure.travis-ci.org/ota42y/hubot-note.png?branch=master)](http://travis-ci.org/ota42y/hubot-note)
+[![NPM](https://nodei.co/npm/hubot-note.png)](https://nodei.co/npm/hubot-note/)
 
 ==========
-### This Script not released so don't work well
 
-This script save and show chat log.
+This script save and show chat log on chat.
 
 
 # Usage
@@ -30,3 +30,6 @@ hubot: user2: They can be toppled
 
 
 ```
+
+# TODO
+- output note to file
