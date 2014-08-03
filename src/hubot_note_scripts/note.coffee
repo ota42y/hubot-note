@@ -1,11 +1,11 @@
 
 
 class Note
-  constructor: (start_at) ->
+  constructor: (title, start_at) ->
     @start_at = start_at
     @end_at = null
     @text = []
-    @setTitle(@start_at)
+    @title = title
 
   addLine: (line) ->
     @text.push(line)
@@ -19,9 +19,6 @@ class Note
 
   setEnd: (end_at) ->
     @end_at = end_at
-
-  setTitle: (text) ->
-    @title = text
 
   isEnd: ->
     return @end_at != null

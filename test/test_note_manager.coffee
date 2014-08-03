@@ -5,7 +5,7 @@ describe "note manager test", ->
   robot = undefined
 
   room_test_name = undefined
-  room_list_test_name = undefined
+  note_test_title = undefined
   beforeEach (done) ->
     @clock = sinon.useFakeTimers(0, "setTimeout", "clearTimeout", "setInterval", "clearInterval", "Date")
 
@@ -14,7 +14,7 @@ describe "note manager test", ->
     robot.brain.on = sinon.stub()
 
     room_test_name = "test"
-    room_list_test_name = "test_list"
+    note_test_title = "test_note"
 
     done()
 
@@ -28,11 +28,30 @@ describe "note manager test", ->
         done()
 
       it "success", (done) ->
-        assert.equal true, manager.createNewNote(room_test_name, room_list_test_name)
-        assert.notEqual null, manager.getNoteList(room_test_name, room_list_test_name)
+        assert.equal note_test_title, manager.createNewNote(room_test_name, note_test_title).title
+        assert.notEqual null, manager.getNote(room_test_name, note_test_title)
+        assert.equal 0, manager.started_note_list.length
+        assert.equal null, manager.executeGetStartedNote(room_test_name)
         done()
 
-    describe "getNoteList", ->
+    describe "getNote", ->
+      manager = undefined
+
+      beforeEach (done) ->
+        manager = new NoteManager robot
+        sinon.stub(manager, "saveNote").returns(true)
+        done()
+
+      it "success", (done) ->
+        manager.createNewNote(room_test_name, note_test_title)
+        assert.equal manager.getNote(room_test_name, note_test_title).title, note_test_title
+        done()
+
+      it "not exist", (done) ->
+        assert.equal manager.getNote(room_test_name, note_test_title), null
+        done()
+
+    describe "executeGetStartedNote", ->
       manager = undefined
 
       beforeEach (done) ->
@@ -41,19 +60,17 @@ describe "note manager test", ->
         done()
 
       it "no exist", (done) ->
-        assert.equal manager.getNoteList('room', 'list'), null
+        assert.equal manager.executeGetStartedNote('room', 'note'), null
         done()
 
       it "exist", (done) ->
-        assert.equal null, manager.getNoteList(room_test_name, room_list_test_name)
-        assert.equal true, manager.createNewNote(room_test_name, room_list_test_name)
-        assert.notEqual null, manager.getNoteList(room_test_name, room_list_test_name)
+        assert.equal null, manager.executeGetStartedNote(room_test_name, note_test_title)
+        assert.equal note_test_title, manager.createNewNote(room_test_name, note_test_title).title
         done()
-
 
   describe "commands", ->
 
-    describe "executeIsStartNote()", ->
+    describe "executeGetStartedNote", ->
       manager = undefined
 
       beforeEach (done) ->
@@ -62,14 +79,18 @@ describe "note manager test", ->
         done()
 
       it "not started", (done) ->
-        assert.equal false, manager.executeIsStartNote(room_test_name, room_list_test_name)
+        assert.equal null, manager.executeGetStartedNote(room_test_name, note_test_title)
         done()
 
       it "started", (done) ->
-        manager.executeStartNote(room_test_name, room_list_test_name)
-        assert.equal true, manager.executeIsStartNote(room_test_name, room_list_test_name)
+        manager.executeStartNote(room_test_name, note_test_title)
+        assert.equal note_test_title, manager.executeGetStartedNote(room_test_name, note_test_title).title
         done()
 
+      it "started any note", (done) ->
+        manager.executeStartNote(room_test_name, note_test_title)
+        assert.equal note_test_title, manager.executeGetStartedNote(room_test_name).title
+        done()
 
     describe "executeStartNote()", ->
       manager = undefined
@@ -80,12 +101,12 @@ describe "note manager test", ->
         done()
 
       it "start note", (done) ->
-        assert.equal true, manager.executeStartNote(room_test_name, room_list_test_name)
+        assert.equal true, manager.executeStartNote(room_test_name, note_test_title)
         done()
 
       it "already started", (done) ->
-        manager.executeStartNote(room_test_name, room_list_test_name)
-        assert.equal false, manager.executeStartNote(room_test_name, room_list_test_name)
+        manager.executeStartNote(room_test_name, note_test_title)
+        assert.equal false, manager.executeStartNote(room_test_name, note_test_title)
         done()
 
     describe "executeNoteShow()", ->
@@ -105,33 +126,31 @@ describe "note manager test", ->
         done()
 
       it "show all lines in note", (done) ->
-        manager.executeStartNote(room_test_name, room_list_test_name)
+        manager.executeStartNote(room_test_name, note_test_title)
         for line in all_line
           manager.writeTextToNewestNoteInRoom(room_test_name, line)
-        assert.equal all_line.join("\n"), manager.executeNoteShow(room_test_name, room_list_test_name)
+        assert.equal all_line.join("\n"), manager.executeNoteShow(room_test_name, note_test_title)
         done()
 
       it "show 3 lines in note", (done) ->
-        manager.executeStartNote(room_test_name, room_list_test_name)
+        manager.executeStartNote(room_test_name, note_test_title)
         for line in all_line
           manager.writeTextToNewestNoteInRoom(room_test_name, line)
-        assert.equal all_line.slice(1).join("\n"), manager.executeNoteShow(room_test_name, room_list_test_name, 3)
+        assert.equal all_line.slice(1).join("\n"), manager.executeNoteShow(room_test_name, note_test_title, 3)
         done()
 
       it 'nothing show note', (done) ->
-        assert.equal null, manager.executeNoteShow(room_test_name, room_list_test_name)
+        assert.equal null, manager.executeNoteShow(room_test_name, note_test_title)
         done()
 
-      it 'when all note is end, but show note latest one', (done) ->
+      it 'when all note is end, show no exist message', (done) ->
         for line in all_line
-          manager.executeStartNote(room_test_name, room_list_test_name)
+          manager.executeStartNote(room_test_name, note_test_title + line)
           manager.writeTextToNewestNoteInRoom(room_test_name, line)
-          manager.executeNoteStop(room_test_name, room_list_test_name)
+          manager.executeNoteStop(room_test_name, note_test_title + line)
 
-        assert.equal all_line[all_line.length-1], manager.executeNoteShow(room_test_name, room_list_test_name)
+        assert.equal manager.executeNoteShow(room_test_name), null
         done()
-
-
 
     describe "executeNoteEnd()", ->
       manager = undefined
@@ -139,20 +158,21 @@ describe "note manager test", ->
       beforeEach (done) ->
         manager = new NoteManager robot
         sinon.stub(manager, "saveNote").returns(true)
-        manager.executeStartNote(room_test_name, room_list_test_name)
+        manager.executeStartNote(room_test_name, note_test_title)
         done()
 
       it 'end', (done) ->
-        assert.equal true, manager.executeNoteStop(room_test_name, room_list_test_name)
+        assert.equal true, manager.executeNoteStop(room_test_name, note_test_title)
         done()
 
-      it 'set end date', (done) ->
-        manager.executeNoteStop(room_test_name, room_list_test_name)
-        latest_note = manager.getLatestNoteInRoom(room_test_name, room_list_test_name)
-        assert.equal new Date().getTime(), latest_note.end_at.getTime()
+      it "don't exist started note", (done) ->
+        manager.executeNoteStop(room_test_name, note_test_title)
+        note = manager.executeGetStartedNote(room_test_name, note_test_title)
+        assert.equal note, null
         done()
 
       it 'already end', (done) ->
-        manager.executeNoteStop(room_test_name, room_list_test_name)
-        assert.equal false, manager.executeNoteStop(room_test_name, room_list_test_name)
+        manager.executeNoteStop(room_test_name, note_test_title)
+        assert.equal false, manager.executeNoteStop(room_test_name, note_test_title)
         done()
+
