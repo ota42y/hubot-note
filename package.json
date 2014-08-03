@@ -1,9 +1,12 @@
 {
   "name": "hubot_note",
   "version": "0.0.1",
-  "description": "hubot note script",
-  "main": "./scripts/index.coffee",
-  "author": "ota42y",
+  "description": "hubot note taking script",
+  "main": "./src/hubot_note_command.coffee",
+  "author": {
+    "name": "ota42y",
+    "email": "ota42y@gmail(dot)com"
+  },
   "license": "MIT",
   "keywords": [
     "hubot",
@@ -12,12 +15,15 @@
   "scripts": {
     "test": "cake test"
   },
+  "repository" : {
+    "type" : "git",
+    "url" : "git@github.com:ota42y/hubot-note.git"
+  },
   "dependencies": {
     "coffee-script": ">= 1.1.0",
-    "strftime" : ""
+    "strftime" : "*"
   },
   "devDependencies": {
-    "coffee-script": ">= 1.1.0",
     "chai": "~1.0.3",
     "mocha": ">= 1.2.1",
     "sinon": "~1.10.2"
